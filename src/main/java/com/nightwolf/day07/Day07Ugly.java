@@ -13,7 +13,7 @@ public class Day07Ugly implements Day07 {
 
 	public Day07Ugly() {
 		root = parseDirectories();
-		root.print(0);
+		//		root.print(0);
 	}
 
 	@Override
