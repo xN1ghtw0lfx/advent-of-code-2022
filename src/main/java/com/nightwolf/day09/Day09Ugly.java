@@ -21,14 +21,14 @@ public class Day09Ugly implements Day09 {
 
 	@Override
 	public Long answerOne() {
-		var rope = new Rope(1, false);
+		var rope = new Rope(1, false, 1);
 		input().forEach(rope::apply);
 		return rope.getTail(0).getAmountOfUniquePositions();
 	}
 
 	@Override
 	public Long answerTwo() {
-		var rope = new Rope(9, true);
+		var rope = new Rope(9, false, 1);
 		input().forEach(rope::apply);
 		return rope.getTail(8).getAmountOfUniquePositions();
 	}
@@ -45,9 +45,13 @@ public class Day09Ugly implements Day09 {
 		private final Knot head;
 		private final List<Knot> tails;
 		private final boolean debug;
+		private final int multiplicand;
 
-		public Rope(int tails, boolean debug) {
+		private Runnable drawCallback;
+
+		public Rope(int tails, boolean debug, int multiplicand) {
 			this.debug = debug;
+			this.multiplicand = multiplicand;
 			this.head = new Knot();
 			this.tails = new ArrayList<>();
 			for (int i = 0; i < tails; i++) {
@@ -55,14 +59,26 @@ public class Day09Ugly implements Day09 {
 			}
 		}
 
+		public void setDrawCallback(Runnable drawCallback) {
+			this.drawCallback = drawCallback;
+		}
+
 		public Knot getTail(int i) {
 			return tails.get(i);
+		}
+
+		public Knot getHead() {
+			return head;
+		}
+
+		public List<Knot> getTails() {
+			return tails;
 		}
 
 		public void apply(String line) {
 			var split = line.split(" ");
 			var direction = Direction.direction(split[0]);
-			var amount = Integer.parseInt(split[1]);
+			var amount = Integer.parseInt(split[1]) * multiplicand;
 			for (int i = 0; i < amount; i++) {
 				head.translate(direction);
 				for (int j = 0; j < tails.size(); j++) {
@@ -104,6 +120,9 @@ public class Day09Ugly implements Day09 {
 				}
 				if (debug) {
 					print();
+				}
+				if (drawCallback != null) {
+					drawCallback.run();
 				}
 			}
 		}
