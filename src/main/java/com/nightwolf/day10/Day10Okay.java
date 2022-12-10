@@ -19,9 +19,9 @@ public class Day10Okay implements Day10 {
 		for (int i = 0; i < registerHistory.size(); i += 40) {
 			for (int j = 0; j < 40; j++) {
 				if (Math.abs(registerHistory.get(i + j) - j) <= 1) {
-					sb.append("#");
+					sb.append("##");
 				} else {
-					sb.append(".");
+					sb.append("  ");
 				}
 			}
 			sb.append("\n");

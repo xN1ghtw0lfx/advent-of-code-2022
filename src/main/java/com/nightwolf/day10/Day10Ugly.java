@@ -45,9 +45,9 @@ public class Day10Ugly implements Day10 {
 			if (split[0].equals("noop")) {
 
 				if (List.of(x - 1, x, x + 1).contains(cycle % 41)) {
-					sb.append('#');
+					sb.append("##");
 				} else {
-					sb.append('.');
+					sb.append("  ");
 				}
 				cycle++;
 				if (cycle == 40) {
@@ -58,9 +58,9 @@ public class Day10Ugly implements Day10 {
 				var valueToAdd = Integer.parseInt(split[1]);
 
 				if (List.of(x - 1, x, x + 1).contains(cycle % 41)) {
-					sb.append('#');
+					sb.append("##");
 				} else {
-					sb.append('.');
+					sb.append("  ");
 				}
 				cycle++;
 				if (cycle == 40) {
@@ -69,9 +69,9 @@ public class Day10Ugly implements Day10 {
 				}
 
 				if (List.of(x - 1, x, x + 1).contains(cycle % 41)) {
-					sb.append('#');
+					sb.append("##");
 				} else {
-					sb.append('.');
+					sb.append("  ");
 				}
 				cycle++;
 				if (cycle == 40) {

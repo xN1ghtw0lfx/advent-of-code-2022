@@ -15,6 +15,10 @@ public interface Day<T, U> {
 		return input0();
 	}
 
+	default Stream<String> input(String fileName) {
+		return input0(fileName);
+	}
+
 	default Stream<String> input(int skip) {
 		return input0(skip);
 	}
@@ -23,21 +27,25 @@ public interface Day<T, U> {
 		return input0(skip, limit);
 	}
 
+	private static Stream<String> input0(String fileName) {
+		return input(getCaller(), fileName, 0, -1);
+	}
+
 	private static Stream<String> input0() {
-		return input(getCaller(), 0, -1);
+		return input(getCaller(), "input.txt", 0, -1);
 	}
 
 	private static Stream<String> input0(int skip) {
-		return input(getCaller(), skip, -1);
+		return input(getCaller(), "input.txt", skip, -1);
 	}
 
 	private static Stream<String> input0(int skip, int limit) {
-		return input(getCaller(), skip, limit);
+		return input(getCaller(), "input.txt", skip, limit);
 	}
 
-	private static Stream<String> input(Class<?> type, int skip, int limit) {
+	private static Stream<String> input(Class<?> type, String fileName, int skip, int limit) {
 		try {
-			var resource = type.getResource("input.txt");
+			var resource = type.getResource(fileName);
 			assert resource != null;
 
 			var bufferedReader = Files.newBufferedReader(Path.of(resource.toURI()));
