@@ -9,7 +9,7 @@ import javax.swing.*;
 public class Day09Draw {
 
 	public void visualize() {
-		var rope = new Day09Ugly.Rope(720, false, 2);
+		var rope = new Day09Ugly.Rope(720, 2);
 		Frame ex = new Frame(rope);
 		rope.setDrawCallback(ex.surface::draw);
 

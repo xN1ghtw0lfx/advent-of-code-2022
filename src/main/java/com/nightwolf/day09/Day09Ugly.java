@@ -1,11 +1,7 @@
 package com.nightwolf.day09;
 import static com.nightwolf.day09.Day09Ugly.Direction.Down;
 import static com.nightwolf.day09.Day09Ugly.Direction.Left;
-import static com.nightwolf.day09.Day09Ugly.Direction.LeftDown;
-import static com.nightwolf.day09.Day09Ugly.Direction.LeftUp;
 import static com.nightwolf.day09.Day09Ugly.Direction.Right;
-import static com.nightwolf.day09.Day09Ugly.Direction.RightDown;
-import static com.nightwolf.day09.Day09Ugly.Direction.RightUp;
 import static com.nightwolf.day09.Day09Ugly.Direction.Up;
 
 import java.awt.*;
@@ -21,14 +17,14 @@ public class Day09Ugly implements Day09 {
 
 	@Override
 	public Long answerOne() {
-		var rope = new Rope(1, false, 1);
+		var rope = new Rope(1, 1);
 		input().forEach(rope::apply);
 		return rope.getTail(0).getAmountOfUniquePositions();
 	}
 
 	@Override
 	public Long answerTwo() {
-		var rope = new Rope(9, false, 1);
+		var rope = new Rope(9, 1);
 		input().forEach(rope::apply);
 		return rope.getTail(8).getAmountOfUniquePositions();
 	}
@@ -42,20 +38,16 @@ public class Day09Ugly implements Day09 {
 
 	public static class Rope {
 
-		private final Knot head;
-		private final List<Knot> tails;
-		private final boolean debug;
+		private final List<Knot> knots;
 		private final int multiplicand;
 
 		private Runnable drawCallback;
 
-		public Rope(int tails, boolean debug, int multiplicand) {
-			this.debug = debug;
+		public Rope(int tails, int multiplicand) {
 			this.multiplicand = multiplicand;
-			this.head = new Knot();
-			this.tails = new ArrayList<>();
-			for (int i = 0; i < tails; i++) {
-				this.tails.add(new Knot());
+			this.knots = new ArrayList<>(tails + 1);
+			for (int i = 0; i < tails + 1; i++) {
+				this.knots.add(new Knot());
 			}
 		}
 
@@ -64,15 +56,15 @@ public class Day09Ugly implements Day09 {
 		}
 
 		public Knot getTail(int i) {
-			return tails.get(i);
+			return knots.get(i + 1);
 		}
 
 		public Knot getHead() {
-			return head;
+			return knots.get(0);
 		}
 
 		public List<Knot> getTails() {
-			return tails;
+			return knots.subList(1, knots.size());
 		}
 
 		public void apply(String line) {
@@ -80,76 +72,38 @@ public class Day09Ugly implements Day09 {
 			var direction = Direction.direction(split[0]);
 			var amount = Integer.parseInt(split[1]) * multiplicand;
 			for (int i = 0; i < amount; i++) {
-				head.translate(direction);
-				for (int j = 0; j < tails.size(); j++) {
-					var knot = tails.get(j);
+				for (int j = 0; j < knots.size(); j++) {
+					var knot = knots.get(j);
 
-					Knot previousKnot = head;
-					if (j != 0) {
-						previousKnot = tails.get(j - 1);
+					if (j == 0) {
+						knot.translate(direction);
+						continue;
 					}
 
+					var previousKnot = knots.get(j - 1);
 					if (!previousKnot.adjacent(knot)) {
-						var y = previousKnot.point.y - knot.point.y;
-						var x = previousKnot.point.x - knot.point.x;
+						var y = previousKnot.getPoint().y - knot.getPoint().y;
+						var x = previousKnot.getPoint().x - knot.getPoint().x;
 
-						if (x > 0) {
-							if (y == 0) {
-								knot.translate(Right);
-							} else if (y > 0) {
-								knot.translate(RightDown);
-							} else {
-								knot.translate(RightUp);
-							}
-						} else if (x < 0) {
-							if (y > 0) {
-								knot.translate(LeftDown);
-							} else if (y == 0) {
-								knot.translate(Left);
-							} else {
-								knot.translate(LeftUp);
-							}
-						} else {
-							if (y < 0) {
-								knot.translate(Up);
-							} else if (y > 0) {
-								knot.translate(Down);
-							}
+						var xTrans = 0;
+						var yTrans = 0;
+						if (y < 0) {
+							yTrans = Up.getMove().y;
+						} else if (y > 0) {
+							yTrans = Down.getMove().y;
 						}
+						if (x > 0) {
+							xTrans = Right.getMove().x;
+						} else if (x < 0) {
+							xTrans = Left.getMove().x;
+						}
+						knot.translate(xTrans, yTrans);
 					}
-				}
-				if (debug) {
-					print();
 				}
 				if (drawCallback != null) {
 					drawCallback.run();
 				}
 			}
-		}
-
-		private void print() {
-			for (int i = -25; i < 25; i++) {
-				inner:
-				for (int j = -25; j < 25; j++) {
-					if (head.point.equals(new Point(j, i))) {
-						System.out.print("H");
-						continue;
-					}
-					for (int k = 0; k < tails.size(); k++) {
-						if (tails.get(k).point.equals(new Point(j, i))) {
-							System.out.print("" + (k + 1));
-							continue inner;
-						}
-					}
-					if (new Point(0, 0).equals(new Point(j, i))) {
-						System.out.print("S");
-						continue;
-					}
-					System.out.print(".");
-				}
-				System.out.println();
-			}
-			System.out.println("\n");
 		}
 	}
 
@@ -157,11 +111,7 @@ public class Day09Ugly implements Day09 {
 		Up("U", new Point(0, -1)),
 		Down("D", new Point(0, 1)),
 		Right("R", new Point(1, 0)),
-		Left("L", new Point(-1, 0)),
-		RightUp("RU", new Point(1, -1)),
-		RightDown("RD", new Point(1, 1)),
-		LeftUp("LU", new Point(-1, -1)),
-		LeftDown("LD", new Point(-1, 1));
+		Left("L", new Point(-1, 0));
 
 		final String input;
 
@@ -197,9 +147,13 @@ public class Day09Ugly implements Day09 {
 		}
 
 		public void translate(Direction direction) {
-			history.add((Point) point.clone());
 			var p = direction.getMove();
-			point.translate(p.x, p.y);
+			translate(p.x, p.y);
+		}
+
+		public void translate(int x, int y) {
+			history.add((Point) point.clone());
+			point.translate(x, y);
 		}
 
 		public long getAmountOfUniquePositions() {
