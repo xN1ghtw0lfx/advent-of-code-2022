@@ -22,7 +22,7 @@ public class Leaderboard {
 		for (JSONObject member : members) {
 			System.out.println(member.get("name"));
 			var completionDayLevel = (JSONObject) member.get("completion_day_level");
-			for (int i = 1; i <= 25; i++) {
+			for (int i = AoCUtils.getDay(); i <= 25; i++) {
 				var day = (JSONObject) completionDayLevel.get(Integer.toString(i));
 				if (day != null) {
 					System.out.printf("Day %d%n", i);
