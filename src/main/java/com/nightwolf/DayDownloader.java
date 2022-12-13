@@ -63,13 +63,6 @@ public class DayDownloader {
 
 		var client = AoCUtils.getClient();
 
-		//		var challengeHtmlPath = resourceDayPath.resolve("challenge.html");
-		//		if (!Files.exists(challengeHtmlPath)) {
-		//			var challengeTextRequest = getChallengeTextRequest(day);
-		//			var challengeHtml = client.send(challengeTextRequest, HttpResponse.BodyHandlers.ofString());
-		//			Files.writeString(challengeHtmlPath, challengeHtml.body());
-		//		}
-
 		var challengeInputPath = resourceDayPath.resolve("input.txt");
 		if (!Files.exists(challengeInputPath)) {
 			var challengeInputRequest = getChallengeInputRequest(day);
@@ -77,12 +70,7 @@ public class DayDownloader {
 			Files.writeString(challengeInputPath, challengeInput.body());
 		}
 
-		//	private static HttpRequest getChallengeTextRequest(int day) {
-		//		return HttpRequest.newBuilder()
-		//				.GET()
-		//				.uri(URI.create("https://adventofcode.com/2022/day/" + day))
-		//				.build();
-		//	}
+		System.out.println("Challenge can be found at: https://adventofcode.com/2022/day/" + day);
 	}
 
 	private static HttpRequest getChallengeInputRequest(int day) {
