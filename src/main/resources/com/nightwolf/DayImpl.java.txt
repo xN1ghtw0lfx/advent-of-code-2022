@@ -1,0 +1,21 @@
+package com.nightwolf.day{{day}};
+
+public class Day{{day}}{{name}} implements Day{{day}} {
+
+    @Override
+    public String answerOne() {
+        return "";
+    }
+
+    @Override
+    public String answerTwo() {
+        return "";
+    }
+
+    public static void main(String[] args) {
+        var day = new Day{{day}}{{name}}();
+
+        System.out.println("Answer 1: " + day.answerOne());
+        System.out.println("Answer 2: " + day.answerTwo());
+    }
+}

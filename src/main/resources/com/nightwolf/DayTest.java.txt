@@ -1,0 +1,21 @@
+package com.nightwolf.day{{day}};
+
+import java.util.List;
+import com.nightwolf.DayTest;
+
+class Day{{day}}Test extends DayTest<Day{{day}}, String, String> {
+
+	protected static List<Day{{day}}> getDays() {
+		return getDays(Day{{day}}.class);
+	}
+
+	@Override
+	protected String answerOne() {
+		return "";
+	}
+
+	@Override
+	protected String answerTwo() {
+		return "";
+	}
+}

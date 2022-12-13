@@ -1,0 +1,6 @@
+package com.nightwolf.day{{day}};
+
+import com.nightwolf.Day;
+
+public interface Day{{day}} extends Day<String, String> {
+}

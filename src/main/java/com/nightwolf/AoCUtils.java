@@ -32,7 +32,7 @@ public class AoCUtils {
 	}
 
 	public static int getDay() {
-		return Integer.parseInt(properties.getProperty("day"));
+		return Integer.parseInt(properties.getProperty("day", "1"));
 	}
 
 	public static HttpClient getClient() {
