@@ -80,7 +80,7 @@ public class Day13Better implements Day13 {
 		}
 	}
 
-	public static void main(String[] args) throws JsonProcessingException {
+	public static void main(String[] args) {
 		var day = new Day13Better();
 
 		System.out.println("Answer 1: " + day.answerOne());

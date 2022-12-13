@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 public class Day13Ugly implements Day13 {
 	@Override
 	public Integer answerOne() {
@@ -114,7 +112,7 @@ public class Day13Ugly implements Day13 {
 		return 0;
 	}
 
-	public static void main(String[] args) throws JsonProcessingException {
+	public static void main(String[] args) {
 		var day = new Day13Ugly();
 
 		System.out.println("Answer 1: " + day.answerOne());
