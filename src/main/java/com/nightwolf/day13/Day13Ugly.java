@@ -48,22 +48,26 @@ public class Day13Ugly implements Day13 {
 		var chars = firstLine.toCharArray();
 		Deque<List<Object>> listStack = new ArrayDeque<>();
 		List<Object> list = new ArrayList<>();
-		for (int j = 0; j < chars.length; j++) {
-			var c = chars[j];
+		StringBuilder number = new StringBuilder();
+		for (int i = 0; i < chars.length; i++) {
+			var c = chars[i];
 			if (c == '[') {
-				if (j != 0) {
+				if (i != 0) {
 					listStack.add(list);
 					list = new ArrayList<>();
 				}
 				if (!listStack.isEmpty()) {
 					listStack.getLast().add(list);
 				}
-			} else if (c == '1' && chars[j + 1] == '0') {
-				list.add(10);
-				j++;
-			} else if (c >= '0' && c <= '9') {
-				list.add(chars[j] - '0');
-			} else if (c == ']') {
+			}
+			if (c >= '0' && c <= '9') {
+				number.append(c);
+			}
+			if ((c == ',' || c == ']') && number.length() > 0) {
+				list.add(Integer.parseInt(number.toString()));
+				number = new StringBuilder();
+			}
+			if (c == ']') {
 				if (!listStack.isEmpty()) {
 					list = listStack.pollLast();
 				}
