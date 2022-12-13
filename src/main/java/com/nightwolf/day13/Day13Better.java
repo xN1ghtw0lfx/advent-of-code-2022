@@ -1,6 +1,4 @@
 package com.nightwolf.day13;
-import static java.util.Collections.emptyList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,26 +26,20 @@ public class Day13Better implements Day13 {
 
 	@Override
 	public Integer answerTwo() {
-		List<List<Object>> lists = new ArrayList<>();
+		var lists = new ArrayList<>();
 		var lines = input().toList();
 
 		for (int i = 0; i < lines.size(); i += 3) {
-			var firstLine = lines.get(i);
-			List<Object> firstLineList = parseLine(firstLine);
-			lists.add(firstLineList);
-
-			var secondLine = lines.get(i + 1);
-			List<Object> secondLineList = parseLine(secondLine);
-			lists.add(secondLineList);
+			lists.add(parseLine(lines.get(i)));
+			lists.add(parseLine(lines.get(i + 1)));
 		}
 
 		List<Object> firstDivider = List.of(List.of(2));
-		List<Object> secondDivider = List.of(List.of(6));
-
 		lists.add(firstDivider);
+		List<Object> secondDivider = List.of(List.of(6));
 		lists.add(secondDivider);
-		lists.sort(this::compare);
 
+		lists.sort(this::compare);
 		var firstDividerIndex = lists.indexOf(firstDivider) + 1;
 		var secondDividerIndex = lists.indexOf(secondDivider) + 1;
 
@@ -90,18 +82,6 @@ public class Day13Better implements Day13 {
 
 	public static void main(String[] args) throws JsonProcessingException {
 		var day = new Day13Better();
-
-		List<List<String>> initial = new ArrayList<>();
-		initial.add(new ArrayList<>());
-		List<List<String>> result = day.input().reduce(initial, (subtotal, element) -> {
-			if (element.trim().isEmpty()) {
-				subtotal.add(new ArrayList<>());
-			} else {
-				subtotal.get(subtotal.size() - 1).add(element);
-			}
-			return subtotal;
-
-		}, (list1, list2) -> emptyList());
 
 		System.out.println("Answer 1: " + day.answerOne());
 		System.out.println("Answer 2: " + day.answerTwo());
