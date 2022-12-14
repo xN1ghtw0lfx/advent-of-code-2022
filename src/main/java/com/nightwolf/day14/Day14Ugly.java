@@ -92,14 +92,14 @@ public class Day14Ugly implements Day14 {
 		var directions = List.of(p(0, 1), p(-1, 1), p(1, 1));
 		var counter = 0;
 		while (true) {
-			var sand = p(500, 0);
-			if (cave[sand.y()][sand.x() + translateX] != 0) {
-				break;
+			var sandPosition = p(500, 0);
+			if (cave[sandPosition.y()][sandPosition.x() + translateX] != 0) {
+				return counter;
 			}
 			while (true) {
-				var newSandPosition = sand;
+				Point newSandPosition = null;
 				for (Point direction : directions) {
-					var position = sand.add(direction);
+					var position = sandPosition.add(direction);
 
 					if (position.y() >= cave.length || position.x() + translateX >= cave[0].length) {
 						return counter;
@@ -110,15 +110,14 @@ public class Day14Ugly implements Day14 {
 						break;
 					}
 				}
-				if (sand.equals(newSandPosition)) {
-					cave[sand.y()][sand.x() + translateX] = 'o';
+				if (newSandPosition == null) {
+					cave[sandPosition.y()][sandPosition.x() + translateX] = 'o';
 					counter++;
 					break;
 				}
-				sand = newSandPosition;
+				sandPosition = newSandPosition;
 			}
 		}
-		return counter;
 	}
 
 	private static void printCave(char[][] cave) {
