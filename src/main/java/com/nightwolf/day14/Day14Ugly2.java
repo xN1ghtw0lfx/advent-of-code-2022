@@ -27,8 +27,8 @@ public class Day14Ugly2 implements Day14 {
 	public String answerTwo() {
 		List<List<Position>> rocks = parseLines();
 		var floor = rocks.stream().flatMap(Collection::stream).mapToInt(Position::y).max().orElseThrow() + 2;
-		var occupiedPoints = buildCave(rocks, floor);
-		var counter = simulateSand(occupiedPoints, floor + 1);
+		var positionSet = buildCave(rocks, floor);
+		var counter = simulateSand(positionSet, floor + 1);
 
 		return Integer.toString(counter);
 	}
