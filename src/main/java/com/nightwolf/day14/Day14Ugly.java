@@ -2,9 +2,10 @@ package com.nightwolf.day14;
 
 import static com.nightwolf.day14.Day14Ugly.Point.p;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,18 +35,12 @@ public class Day14Ugly implements Day14 {
 
 	@NotNull
 	private List<List<Point>> parseLines() {
-		List<List<Point>> rocks = new ArrayList<>();
-		for (String line : input().toList()) {
-			var pointsString = line.split(" -> ");
-			List<Point> points = new ArrayList<>();
-			for (String pointString : pointsString) {
-				var split = pointString.split(",");
-				var p = p(split[0], split[1]);
-				points.add(p);
-			}
-			rocks.add(points);
-		}
-		return rocks;
+		return input().map(l -> l.split(" -> "))
+				.map(psa -> Arrays.stream(psa).map(ps -> {
+					var split = ps.split(",");
+					return p(split[0], split[1]);
+				}).collect(Collectors.toList()))
+				.toList();
 	}
 
 	@NotNull
