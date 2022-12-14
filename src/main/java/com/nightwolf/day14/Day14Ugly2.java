@@ -36,10 +36,10 @@ public class Day14Ugly2 implements Day14 {
 	@NotNull
 	private List<List<Position>> parseLines() {
 		return input().map(l -> l.split(" -> "))
-				.map(psa -> Arrays.stream(psa).map(ps -> {
-					var split = ps.split(",");
-					return p(split[0], split[1]);
-				}).collect(Collectors.toList()))
+				.map(psa -> Arrays.stream(psa)
+						.map(ps -> ps.split(","))
+						.map(ps -> p(ps[0], ps[1]))
+						.collect(Collectors.toList()))
 				.toList();
 	}
 
