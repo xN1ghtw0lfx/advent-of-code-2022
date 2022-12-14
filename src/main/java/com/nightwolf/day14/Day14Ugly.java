@@ -14,8 +14,8 @@ public class Day14Ugly implements Day14 {
 	@Override
 	public String answerOne() {
 		List<List<Point>> rocks = parseLines();
-		char[][] cave = buildCave(rocks, 300, -400, false);
-		var counter = simulateSand(cave, -400);
+		char[][] cave = buildCave(rocks, false);
+		var counter = simulateSand(cave);
 
 		printCave(cave);
 
@@ -25,8 +25,8 @@ public class Day14Ugly implements Day14 {
 	@Override
 	public String answerTwo() {
 		List<List<Point>> rocks = parseLines();
-		char[][] cave = buildCave(rocks, 1000, 0, true);
-		int counter = simulateSand(cave, 0);
+		char[][] cave = buildCave(rocks, true);
+		int counter = simulateSand(cave);
 
 		printCave(cave);
 
@@ -44,8 +44,8 @@ public class Day14Ugly implements Day14 {
 	}
 
 	@NotNull
-	private static char[][] buildCave(List<List<Point>> rocks, int width, int translateX, boolean addFloor) {
-		char[][] cave = new char[200][width];
+	private static char[][] buildCave(List<List<Point>> rocks, boolean addFloor) {
+		char[][] cave = new char[200][1000];
 		for (List<Point> rock : rocks) {
 			for (int i = 0; i < rock.size() - 1; i++) {
 				var from = rock.get(i);
@@ -55,19 +55,19 @@ public class Day14Ugly implements Day14 {
 
 				if (subtract.x() > 0) {
 					for (int j = from.x(); j <= from.x() + subtract.x(); j++) {
-						cave[from.y()][j + translateX] = '#';
+						cave[from.y()][j] = '#';
 					}
 				} else if (subtract.x() < 0) {
 					for (int j = from.x(); j != from.x() + subtract.x() - 1; j--) {
-						cave[from.y()][j + translateX] = '#';
+						cave[from.y()][j] = '#';
 					}
 				} else if (subtract.y() > 0) {
 					for (int j = from.y(); j <= from.y() + subtract.y(); j++) {
-						cave[j][from.x() + translateX] = '#';
+						cave[j][from.x()] = '#';
 					}
 				} else if (subtract.y() < 0) {
 					for (int j = from.y(); j != from.y() + subtract.y() - 1; j--) {
-						cave[j][from.x() + translateX] = '#';
+						cave[j][from.x()] = '#';
 					}
 				}
 			}
@@ -83,12 +83,12 @@ public class Day14Ugly implements Day14 {
 		return cave;
 	}
 
-	private static int simulateSand(char[][] cave, int translateX) {
+	private static int simulateSand(char[][] cave) {
 		var directions = List.of(p(0, 1), p(-1, 1), p(1, 1));
 		var counter = 0;
 		while (true) {
 			var sandPosition = p(500, 0);
-			if (cave[sandPosition.y()][sandPosition.x() + translateX] != 0) {
+			if (cave[sandPosition.y()][sandPosition.x()] != 0) {
 				return counter;
 			}
 			while (true) {
@@ -96,17 +96,17 @@ public class Day14Ugly implements Day14 {
 				for (Point direction : directions) {
 					var position = sandPosition.add(direction);
 
-					if (position.y() >= cave.length || position.x() + translateX >= cave[0].length) {
+					if (position.y() >= cave.length || position.x() >= cave[0].length) {
 						return counter;
 					}
 
-					if (cave[position.y()][position.x() + translateX] == 0) {
+					if (cave[position.y()][position.x()] == 0) {
 						newSandPosition = position;
 						break;
 					}
 				}
 				if (newSandPosition == null) {
-					cave[sandPosition.y()][sandPosition.x() + translateX] = 'o';
+					cave[sandPosition.y()][sandPosition.x()] = 'o';
 					counter++;
 					break;
 				}
