@@ -91,7 +91,6 @@ public class Day14Ugly implements Day14 {
 	private static int simulateSand(char[][] cave, int translateX) {
 		var directions = List.of(p(0, 1), p(-1, 1), p(1, 1));
 		var counter = 0;
-		outer:
 		while (true) {
 			var sand = p(500, 0);
 			if (cave[sand.y()][sand.x() + translateX] != 0) {
@@ -103,7 +102,7 @@ public class Day14Ugly implements Day14 {
 					var position = sand.add(direction);
 
 					if (position.y() >= cave.length || position.x() + translateX >= cave[0].length) {
-						break outer;
+						return counter;
 					}
 
 					if (cave[position.y()][position.x() + translateX] == 0) {
