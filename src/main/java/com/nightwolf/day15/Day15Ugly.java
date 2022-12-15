@@ -51,21 +51,25 @@ public class Day15Ugly implements Day15 {
 		return Integer.toString(occupiedPositions.size());
 	}
 
-	@NotNull
-	private static Sensor parseSensor(String line) {
-		var replace = line.replace("Sensor at x=", "").replace(", y=", " ").replace(": closest beacon is at x=", " ").replace(", y=", " ");
-		var split = replace.split(" ");
-
-		var sensorP = p(split[0], split[1]);
-		var beaconP = p(split[2], split[3]);
-		var distance = sensorP.distance(beaconP);
-		return new Sensor(sensorP, beaconP, distance);
-	}
-
 	@Override
 	public String answerTwo() {
 		var sensors = input().map(Day15Ugly::parseSensor).toList();
-		var sets = sensors.stream().map(s -> s.getEdgePositions(s.distance() + 1)).flatMap(Collection::stream).toList();
+
+		var possibleSensors = new ArrayList<Sensor>();
+		for (var outer : sensors) {
+			for (var inner : sensors) {
+				if (inner == outer) {
+					continue;
+				}
+
+				var distance = outer.position().distance(inner.position());
+				if (distance == outer.distance() + inner.distance() + 2) {
+					possibleSensors.add(outer);
+				}
+			}
+		}
+
+		var sets = possibleSensors.parallelStream().map(s -> s.getEdgePositions(s.distance() + 1)).flatMap(Collection::stream).toList();
 
 		outer:
 		for (var position : sets) {
@@ -79,11 +83,21 @@ public class Day15Ugly implements Day15 {
 					continue outer;
 				}
 			}
-
 			return Long.toString(position.x() * 4000000L + position.y());
 		}
 
 		return "-1";
+	}
+
+	@NotNull
+	private static Sensor parseSensor(String line) {
+		var replace = line.replace("Sensor at x=", "").replace(", y=", " ").replace(": closest beacon is at x=", " ").replace(", y=", " ");
+		var split = replace.split(" ");
+
+		var sensorP = p(split[0], split[1]);
+		var beaconP = p(split[2], split[3]);
+		var distance = sensorP.distance(beaconP);
+		return new Sensor(sensorP, beaconP, distance);
 	}
 
 	public static void main(String[] args) {
@@ -100,7 +114,7 @@ public class Day15Ugly implements Day15 {
 			var minX = position().x() - distance;
 			var y = 0;
 
-			List<Position> edgePositions = new ArrayList<>();
+			List<Position> edgePositions = new ArrayList<>(3000000);
 			for (var i = minX; i <= maxX; i++) {
 
 				edgePositions.add(p(i, position.y() + y));
